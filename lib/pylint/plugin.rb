@@ -37,7 +37,7 @@ module Danger
     def run_pylint(dir)
         command = "pylint #{dir}"
         command << " --output-format=json"
-        `#{command}`.split("\n").drop(1).join("")
+        `#{command}`.split("\n").join("")
     end
 
     def print_markdown_table(errors)
