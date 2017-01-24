@@ -35,7 +35,7 @@ module Danger
     end
 
     def run_pylint(dir)
-        command = "pylint #{dir}"
+        command = "pylint #{dir} --disable=all --enable=logging-not-lazy,line-too-long"
         command << " --output-format=json"
         `#{command}`.split("\n").join("")
     end
