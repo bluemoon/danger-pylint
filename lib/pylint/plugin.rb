@@ -41,7 +41,6 @@ module Danger
     end
 
     def print_markdown_table(errors)
-        message(errors)
         data = JSON.parse(errors)
         report = data.inject(MARKDOWN_TEMPLATE) do |out, error_line|
             file = error_line['path']
