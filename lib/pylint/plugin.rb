@@ -45,17 +45,12 @@ module Danger
     end
 
     def print_markdown_table(errors=[])
-        report = errors.inject(MARKDOWN_TEMPLATE) do |out, error_line|
-            file, line, column, reason = error_line.split(":")
-            out += "| #{short_link(file, line)} | #{line} | #{column} | #{reason.strip.gsub("'", "`")} |\n"
-        end
-        markdown(report)
-    end
 
-    # @return   [Array<String>]
-    def warn_on_mondays
-      warn 'Trying to merge code on a Monday' if Date.today.wday == 1
+        #report = errors.inject(MARKDOWN_TEMPLATE) do |out, error_line|
+        #     file, line, column, reason = error_line.split(":")
+        #    out += "| #{short_link(file, line)} | #{line} | #{column} | #{reason.strip.gsub("'", "`")} |\n"
+        #end
+        markdown(errors)
     end
-
   end
 end
