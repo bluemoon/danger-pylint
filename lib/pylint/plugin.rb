@@ -47,7 +47,7 @@ module Danger
             line = error_line['line']
             column = error_line['column']
             reason = error_line['msg_id']
-            out += "| #{short_link(file, line)} | #{line} | #{column} | #{reason.strip.gsub("'", "`")} |\n"
+            out += "| #{short_link(file, line)} | #{line} | #{column} | #{reason} |\n"
         end
 
         markdown(report)
