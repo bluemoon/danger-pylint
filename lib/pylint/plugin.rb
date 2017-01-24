@@ -1,3 +1,5 @@
+require 'json'
+
 module Danger
   # This is your plugin class. Any attributes or methods you expose here will
   # be available from within your Dangerfile.
@@ -41,16 +43,28 @@ module Danger
     def run_pylint
         command = "pylint #{base_dir}"
         command << " --output-format=json"
-      `#{command}`.split("\n")
+      `#{command}`.split("\n")[0]
     end
 
-    def print_markdown_table(errors=[])
+    def print_markdown_table(errors)
+        data = JSON.parse(errors)
+        report = data.inject(MARKDOWN_TEMPLATE) do |out, error_line|
+            file = error_line['path']
+            line = error_line['line']
+            column = error_line['column']
+            reason = error_line['msg_id']
+            out += "| #{short_link(file, line)} | #{line} | #{column} | #{reason.strip.gsub("'", "`")} |\n"
+        end
 
-        #report = errors.inject(MARKDOWN_TEMPLATE) do |out, error_line|
-        #     file, line, column, reason = error_line.split(":")
-        #    out += "| #{short_link(file, line)} | #{line} | #{column} | #{reason.strip.gsub("'", "`")} |\n"
-        #end
-        markdown(errors)
+        markdown(report)
+    end
+
+    def short_link(file, line)
+        if danger.scm_provider.to_s == "github"
+            return github.html_link("#{file}#L#{line}", full_path: false)
+        end
+
+        file
     end
   end
 end
