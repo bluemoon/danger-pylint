@@ -29,6 +29,10 @@ module Danger
 
     attr_writer :base_dir
 
+    def base_dir
+      @base_dir || "."
+    end
+
     def lint
         errors = run_pylint
         print_markdown_table(errors)
