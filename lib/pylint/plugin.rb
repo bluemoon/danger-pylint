@@ -25,17 +25,25 @@ module Danger
       "|------|------|--------|--------|\n"\
 
     # @return   [Array<String>]
-    attr_accessor :warnings
-    # @return   [Array<String>]
     attr_accessor :errors
+
+    attr_writer :warns
+
+    def warns
+        @base_dir || ["logging-not-lazy", "logging-too-many-args", "logging-too-few-args"]
+    end
 
     def lint(dir=".")
         errors = run_pylint(dir)
+        if errors.count == 0
+            success("PyLint encountered no errors!")
+            return
+        end
         print_markdown_table(errors)
     end
 
     def run_pylint(dir)
-        command = "pylint #{dir} --disable=all --enable=logging-not-lazy,line-too-long"
+        command = "pylint #{dir} --disable=all --enable=#{warns.join(",")}"
         command << " --output-format=json"
         `#{command}`.split("\n").join("")
     end
