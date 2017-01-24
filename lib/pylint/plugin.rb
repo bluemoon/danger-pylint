@@ -29,19 +29,13 @@ module Danger
     # @return   [Array<String>]
     attr_accessor :errors
 
-    attr_writer :base_dir
-
-    def base_dir
-      @base_dir || "."
-    end
-
-    def lint
-        errors = run_pylint
+    def lint(dir=".")
+        errors = run_pylint(dir)
         print_markdown_table(errors)
     end
 
-    def run_pylint
-        command = "pylint #{base_dir}"
+    def run_pylint(dir)
+        command = "pylint #{dir}"
         command << " --output-format=json"
         `#{command}`.split("\n").drop(1).join("")
     end
