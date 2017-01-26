@@ -28,9 +28,14 @@ module Danger
     attr_accessor :errors
 
     attr_writer :warns
+    attr_writer :diffstat_only
 
     def warns
         @base_dir || ["logging-not-lazy", "logging-too-many-args", "logging-too-few-args"]
+    end
+
+    def diffstat_only
+        @diffstat_only || true
     end
 
     def lint(dir=".")
@@ -43,6 +48,10 @@ module Danger
     end
 
     def run_pylint(dir)
+        if diffstat
+            dir = git.modified_files.join(" ")
+        end
+
         command = "pylint #{dir} --disable=all --enable=#{warns.join(",")}"
         command << " --output-format=json"
         `#{command}`.split("\n").join("")
