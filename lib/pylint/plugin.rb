@@ -49,7 +49,8 @@ module Danger
 
     def run_pylint(dir)
         if diffstat
-            dir = git.modified_files.join(" ")
+            diff_python_files = git.modified_files.select { |path| path.include? "*.py" }
+            dir = diff_python_files.join(" ")
         end
 
         command = "pylint #{dir} --disable=all --enable=#{warns.join(",")}"
